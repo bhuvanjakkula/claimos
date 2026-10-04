@@ -102,6 +102,7 @@ def test_pro_membership_page_and_subscription():
     assert "Carmack Claim Engine Dashboard" in sub_res.text
 
 def test_first_web_page_shows_technology_utility_and_innovations():
+    client.cookies.clear()
     res = client.get("/")
     assert res.status_code == 200
     # Utility content
