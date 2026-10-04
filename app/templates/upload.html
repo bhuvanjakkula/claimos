@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" id="layer-upload">
+  <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+    <div>
+      <a href="/#layer-upload" class="btn btn-outline" style="font-size: 0.82rem;">
+        &larr; Switch to All Layers Combined Console
+      </a>
+    </div>
+    <div>
+      <button type="button" onclick="populateSHP88421()" class="btn btn-primary" style="background: #ea580c; border-color: #ea580c; font-size: 0.82rem;">
+        ✨ Auto-Fill SHP-88421 Sample Data
+      </button>
+    </div>
+  </div>
+
+  <section class="layer-section">
+    <div class="layer-section-header">
+      <div class="layer-heading-group">
+        <span class="layer-tag" style="background: #0284c7;">LAYER 03</span>
+        <div>
+          <h2 class="layer-title">Telemetry Ingestion &amp; Excursion Reconstruction</h2>
+          <div class="layer-description">Ingest logger telemetry CSVs to reconstruct thermal timeline, custody handoffs, and claim pack</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layer-body">
+      <div style="background: #fff7ed; border: 1px solid #ffedd5; border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <span style="font-weight: 700; color: #9a3412;">Ready-to-use sample CSV:</span>
+          <span style="color: #7c2d12; font-size: 0.88rem; margin-left: 0.5rem;">Download raw file or click "Auto-Fill" to populate test data:</span>
+        </div>
+        <a href="/sample-data/download" class="btn btn-outline" style="border-color: #fdba74; color: #9a3412; font-weight: 600;">
+          📥 Download SHP-88421_logger.csv
+        </a>
+      </div>
+
+      <form method="post" enctype="multipart/form-data">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Reference ID *</label>
+            <input type="text" name="reference" id="in_ref" value="SHP-88421-NEW" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Commodity *</label>
+            <input type="text" name="commodity" id="in_comm" value="Refrigerated biologics" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Spec Min (°C) *</label>
+            <input type="number" step="0.1" name="spec_min_c" id="in_min" value="2.0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Spec Max (°C) *</label>
+            <input type="number" step="0.1" name="spec_max_c" id="in_max" value="8.0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">BOL Setpoint (°C)</label>
+            <input type="number" step="0.1" name="bol_setpoint_c" id="in_setpoint" value="5.0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Origin Pulp Temp (°C)</label>
+            <input type="number" step="0.1" name="origin_pulp_c" id="in_pulp" value="4.6">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Declared Value (USD) *</label>
+            <input type="number" step="1" name="declared_value_usd" id="in_val" value="186000" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Carrier Name *</label>
+            <input type="text" name="carrier" id="in_carrier" value="Northline Reefer" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Shipper Name</label>
+            <input type="text" name="shipper" id="in_shipper" value="Helix Bio">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Receiver Name</label>
+            <input type="text" name="receiver" id="in_receiver" value="City Hospital Pharmacy">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Broker Name</label>
+            <input type="text" name="broker" id="in_broker" value="Harbor Brokerage">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tender ISO Time</label>
+            <input type="text" name="tender_at" id="in_tender" value="2026-09-28T16:30:00+00:00">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem;">
+          <div class="form-group">
+            <label class="form-label">Upload Logger CSV File (.csv)</label>
+            <input type="file" name="logger" id="in_file" accept=".csv" style="padding: 0.45rem;">
+            <span style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Supports 2-column or 5-column cold-chain telemetry formats</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Or Paste Logger CSV Content Directly</label>
+            <textarea name="logger_text" id="in_csv_text" placeholder="timestamp,temperature_c&#10;2026-09-28 16:30,4.6&#10;2026-09-28 17:30,5.0&#10;2026-09-28 18:40,8.4&#10;2026-09-28 20:00,9.6&#10;2026-09-28 22:00,11.1&#10;2026-09-29 00:30,12.8&#10;2026-09-29 03:30,11.7&#10;2026-09-29 06:30,9.5&#10;2026-09-29 08:05,8.3&#10;2026-09-29 09:00,7.7&#10;2026-09-29 12:00,6.4" style="height: 120px; font-family: var(--font-mono); font-size: 0.8rem;"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+          <button type="submit" class="btn btn-dark" style="padding: 0.65rem 1.5rem; font-size: 0.95rem;">
+            🚀 Create Pack &amp; Reconstruct Claim
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script>
+const sampleCsv = `timestamp,temperature_c
+2026-09-28 16:30,4.6
+2026-09-28 17:30,5.0
+2026-09-28 18:40,8.4
+2026-09-28 20:00,9.6
+2026-09-28 22:00,11.1
+2026-09-29 00:30,12.8
+2026-09-29 03:30,11.7
+2026-09-29 06:30,9.5
+2026-09-29 08:05,8.3
+2026-09-29 09:00,7.7
+2026-09-29 12:00,6.4`;
+
+function populateSHP88421() {
+  document.getElementById('in_ref').value = 'SHP-88421-' + Math.floor(1000 + Math.random() * 9000);
+  document.getElementById('in_comm').value = 'Refrigerated biologics';
+  document.getElementById('in_min').value = '2.0';
+  document.getElementById('in_max').value = '8.0';
+  document.getElementById('in_setpoint').value = '5.0';
+  document.getElementById('in_pulp').value = '4.6';
+  document.getElementById('in_val').value = '186000';
+  document.getElementById('in_carrier').value = 'Northline Reefer';
+  document.getElementById('in_shipper').value = 'Helix Bio';
+  document.getElementById('in_receiver').value = 'City Hospital Pharmacy';
+  document.getElementById('in_broker').value = 'Harbor Brokerage';
+  document.getElementById('in_tender').value = '2026-09-28T16:30:00+00:00';
+  document.getElementById('in_csv_text').value = sampleCsv;
+}
+</script>
+{% endblock %}

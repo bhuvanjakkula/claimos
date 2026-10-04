@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>Claim queue</h1>
+<div class="totals">
+  <div class="card">Declared in view<br>${{ '{:,.0f}'.format(totals.value) }}</div>
+  <div class="card">Carrier attributions<br>{{ totals.carrier }}</div>
+  <div class="card">Recovered entered<br>${{ '{:,.0f}'.format(totals.recovered) }}</div>
+</div>
+<form method="get">
+  <label>Attribution <input name="attribution" value="{{ attribution }}" placeholder="carrier"></label>
+  <label>Status <input name="status" value="{{ status }}"></label>
+  <label>Deadline risk only <input name="risk" value="{{ risk }}" placeholder="1"></label>
+  <button>Filter</button>
+</form>
+<table>
+<tr><th>Reference</th><th>Commodity</th><th>Value</th><th>Attribution</th><th>Peak</th><th>Deadline</th><th>Status</th><th>Recovered</th></tr>
+{% for row in rows %}
+<tr>
+  <td><a href="/shipment/{{ row.s.reference }}">{{ row.s.reference }}</a></td>
+  <td>{{ row.s.commodity }}</td>
+  <td>${{ '{:,.0f}'.format(row.s.declared_value_usd) }}</td>
+  <td>{{ row.a.attribution }}</td>
+  <td>{{ row.a.peak_c }}</td>
+  <td class="{{ 'risk' if row.a.deadline_risk else '' }}">{{ row.a.deadline_at }}</td>
+  <td>{{ row.s.status }}</td>
+  <td>${{ '{:,.0f}'.format(row.s.recovered_usd) }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

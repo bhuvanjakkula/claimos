@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" id="layer-audit">
+  <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+    <div>
+      <a href="/#layer-audit" class="btn btn-outline" style="font-size: 0.82rem;">
+        &larr; Switch to All Layers Combined Console
+      </a>
+    </div>
+    <div>
+      <span class="badge badge-disputed" style="font-size: 0.9rem; padding: 0.4rem 0.85rem;">
+        ${{ '{:,.0f}'.format(total) }} Potentially Actionable
+      </span>
+    </div>
+  </div>
+
+  <section class="layer-section">
+    <div class="layer-section-header">
+      <div class="layer-heading-group">
+        <span class="layer-tag" style="background: #7c3aed;">LAYER 02</span>
+        <div>
+          <h2 class="layer-title">Historical Claim Recovery Audit Pilot</h2>
+          <div class="layer-description">Audits written-off and denied freight files to discover dormant recoverable cargo value</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layer-body">
+      <div class="dock-trap-alert" style="background: #f5f3ff; border-color: #ddd6fe; border-left-color: #7c3aed; margin-bottom: 1.5rem;">
+        <div class="dock-trap-icon" style="background: #ede9fe; color: #7c3aed;">⚖️</div>
+        <div class="dock-trap-content">
+          <h4 style="color: #5b21b6;">Dormant Claim Recovery Opportunity</h4>
+          <p style="color: #4c1d95;">
+            These shipments were previously written off or denied, but ClaimOS telemetry analysis attributes fault to the carrier or flags missing documentation that can be cured under Carmack demand protocols. This represents <strong>${{ '{:,.0f}'.format(total) }}</strong> of recoverable value.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Status</th>
+              <th>Attribution</th>
+              <th>Declared Value</th>
+              <th>Missing Evidentiary Documents</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td class="mono-cell" style="font-weight: 700;">
+                <a href="/?ref={{ row.s.reference }}#layer-detail" style="color: #7c3aed; text-decoration: none;">
+                  {{ row.s.reference }}
+                </a>
+              </td>
+              <td><span class="badge badge-no-claim">{{ row.s.status }}</span></td>
+              <td>
+                {% if row.a.attribution == 'carrier' %}
+                  <span class="badge badge-carrier">Carrier</span>
+                {% elif row.a.attribution == 'disputed' %}
+                  <span class="badge badge-disputed">Disputed</span>
+                {% else %}
+                  <span class="badge badge-shipper">{{ row.a.attribution }}</span>
+                {% endif %}
+              </td>
+              <td class="mono-cell" style="font-weight: 700; color: #0f172a;">${{ '{:,.0f}'.format(row.s.declared_value_usd) }}</td>
+              <td>
+                {% if row.a.missing_docs %}
+                  {% for doc in row.a.missing_docs %}
+                    <span class="badge badge-shipper" style="font-size: 0.72rem; margin-right: 0.25rem;">{{ doc }}</span>
+                  {% endfor %}
+                {% else %}
+                  <span style="color: #94a3b8; font-size: 0.82rem;">None</span>
+                {% endif %}
+              </td>
+              <td>
+                <a href="/?ref={{ row.s.reference }}#layer-detail" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.78rem;">
+                  Open File &amp; Build Pack &rarr;
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

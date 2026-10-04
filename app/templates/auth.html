@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" style="max-width: 540px; margin: 2.5rem auto 4rem auto;">
+
+  <!-- Auth Card -->
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="brand-badge-pill">ClaimOS Access Portal</div>
+      <h1 class="auth-title" id="auth-main-title">
+        {% if mode == 'signup' %}Create Shipper / Carrier Account{% else %}Sign In to ClaimOS Engine{% endif %}
+      </h1>
+      <p class="auth-subtitle" id="auth-sub-title">
+        {% if mode == 'signup' %}
+          Register your logistics profile to access automated cold-chain claims and Pro Membership.
+        {% else %}
+          Access continuous thermal telemetry audit, Carmack claim packs, and portfolio recovery.
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Alert / Flash Messages -->
+    {% if error == 'invalid_credentials' %}
+    <div class="auth-alert error">
+      <span class="alert-icon">&times;</span>
+      <div><strong>Authentication Failed:</strong> Invalid Email/Mobile Number or Password. Please try again.</div>
+    </div>
+    {% elif error == 'email_exists' %}
+    <div class="auth-alert error">
+      <span class="alert-icon">&times;</span>
+      <div><strong>Account Exists:</strong> An account with this Email ID already exists. Please Sign In below.</div>
+    </div>
+    {% elif error == 'password_mismatch' %}
+    <div class="auth-alert error">
+      <span class="alert-icon">&times;</span>
+      <div><strong>Validation Error:</strong> Passwords do not match. Please verify.</div>
+    </div>
+    {% elif error == 'missing_fields' %}
+    <div class="auth-alert error">
+      <span class="alert-icon">&times;</span>
+      <div><strong>Required Fields:</strong> Email ID, Password, and Mobile Number are required.</div>
+    </div>
+    {% elif msg == 'logged_out' %}
+    <div class="auth-alert success">
+      <span class="alert-icon">&check;</span>
+      <div>You have been successfully logged out of ClaimOS.</div>
+    </div>
+    {% elif msg == 'subscribe_auth_required' %}
+    <div class="auth-alert info">
+      <span class="alert-icon">&starf;</span>
+      <div>Please Sign In or Sign Up to activate your <strong>Customer Pro Membership</strong> ($ USD/month).</div>
+    </div>
+    {% endif %}
+
+    <!-- Auth Mode Tabs -->
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab-btn {% if mode != 'signup' %}active{% endif %}" id="tab-signin" onclick="switchAuthMode('signin')">
+        Sign In
+      </button>
+      <button type="button" class="auth-tab-btn {% if mode == 'signup' %}active{% endif %}" id="tab-signup" onclick="switchAuthMode('signup')">
+        Sign Up
+      </button>
+    </div>
+
+    <!-- SIGN IN FORM -->
+    <form id="form-signin" method="post" action="/auth/login" class="auth-form" style="{% if mode == 'signup' %}display: none;{% endif %}">
+      <!-- Direct 1-Click Paid Customer Access -->
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1.25rem; text-align: center;">
+        <div style="font-size: 0.78rem; font-weight: 700; color: #166534; text-transform: uppercase; margin-bottom: 0.25rem;">
+          ⚡ Instant Paid Customer Access
+        </div>
+        <div style="font-size: 0.82rem; color: #15803d; margin-bottom: 0.65rem;">
+          Instantly access all dashboard engine functions (Telematics, 48h Carmack Notices, PDF Packs).
+        </div>
+        <button type="button" class="btn btn-success" style="width: 100%; font-size: 0.88rem; padding: 0.55rem; font-weight: 700;" onclick="submitDemoAccess()">
+          ⚡ 1-Click Unlock All Dashboard Functions &rarr;
+        </button>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.15rem;">
+        <label class="form-label" for="login_id">Email ID or Mobile Number <span class="required-star">*</span></label>
+        <div class="input-with-icon">
+          <input type="text" id="login_id" name="login_id" placeholder="name@company.com or +1 (555) 000-0000" required autofocus>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="form-label" for="signin_password">Password <span class="required-star">*</span></label>
+          <a href="/support" style="font-size: 0.78rem; color: #0284c7; text-decoration: none;">Forgot password?</a>
+        </div>
+        <div class="input-with-icon">
+          <input type="password" id="signin_password" name="password" placeholder="Enter your password" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem;">
+        Sign In to Console &rarr;
+      </button>
+
+      <div class="demo-quick-box">
+        <div class="demo-quick-title">Quick Demo Login:</div>
+        <div class="demo-quick-credentials">
+          <span><strong>Email:</strong> demo@coldchain.com</span>
+          <span><strong>Password:</strong> password123</span>
+        </div>
+        <button type="button" class="btn btn-outline" style="width: 100%; font-size: 0.78rem; padding: 0.35rem;" onclick="fillDemoUser()">
+          Fill Demo Shipper Credentials
+        </button>
+      </div>
+    </form>
+
+    <!-- SIGN UP FORM -->
+    <form id="form-signup" method="post" action="/auth/signup" class="auth-form" style="{% if mode != 'signup' %}display: none;{% endif %}">
+      <div class="form-grid-2">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="su_name">Full Name</label>
+          <input type="text" id="su_name" name="full_name" placeholder="e.g. John Doe">
+        </div>
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="su_company">Company / Organization</label>
+          <input type="text" id="su_company" name="company_name" placeholder="e.g. Acme Cold Logistics">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label class="form-label" for="su_email">Email ID <span class="required-star">*</span></label>
+        <input type="email" id="su_email" name="email" placeholder="john.doe@company.com" required>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label class="form-label" for="su_mobile">Mobile Number <span class="required-star">*</span></label>
+        <input type="tel" id="su_mobile" name="mobile_number" placeholder="+1 (555) 234-5678" required>
+        <span class="field-hint">Used for 2FA Carmack deadline alerts and claim notices</span>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" for="su_password">Create Password <span class="required-star">*</span></label>
+        <input type="password" id="su_password" name="password" placeholder="At least 6 characters" minlength="6" required>
+      </div>
+
+      <!-- Pro Membership Activation Choice -->
+      <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: var(--radius-sm); padding: 0.9rem; margin-bottom: 1.25rem;">
+        <div style="font-weight: 700; color: #0369a1; font-size: 0.88rem; margin-bottom: 0.35rem;">
+          ★ Customer Pro Membership Activation ($ USD / Month)
+        </div>
+        <label style="display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: #0c4a6e; cursor: pointer;">
+          <input type="checkbox" name="activate_pro" value="yes" checked style="margin-top: 0.2rem;">
+          <span>
+            <strong>Activate Customer Pro Membership ($199.00 USD / month)</strong><br>
+            Instantly unlocks all dashboard engine functions (Telematics Ingestion, Carmack Notices, PDF Packs). Billed monthly in USA Dollars.
+          </span>
+        </label>
+      </div>
+
+      <div class="auth-terms">
+        By registering, you agree to statutory freight dispute notice terms and Carmack reserve demand authorization.
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.75rem;">
+        Create Account &amp; Unlock Dashboard &rarr;
+      </button>
+
+      <div style="margin-top: 1rem; text-align: center;">
+        <span style="font-size: 0.8rem; color: #64748b;">Or test immediately without form:</span><br>
+        <button type="button" class="btn btn-outline" style="margin-top: 0.35rem; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-color: #10b981; color: #047857;" onclick="submitDemoAccess()">
+          ⚡ 1-Click Instant Demo Subscriber Access
+        </button>
+      </div>
+    </form>
+
+    <!-- Hidden form for 1-click demo access -->
+    <form id="form-demo-access" method="post" action="/auth/demo-access" style="display: none;"></form>
+
+    <!-- Support and Contact Footer -->
+    <div class="auth-footer-help">
+      <div class="support-mini-chip">
+        <span>Need Assistance or Customer Support?</span>
+      </div>
+      <div style="margin-top: 0.4rem; font-size: 0.85rem;">
+        Direct support &amp; claim enquiries: <a href="mailto:bjtmusic12@gmail.com" class="support-email-link"><strong>bjtmusic12@gmail.com</strong></a>
+      </div>
+      <div style="margin-top: 0.5rem;">
+        <a href="/support" class="btn btn-outline" style="font-size: 0.78rem; padding: 0.35rem 0.75rem;">
+          Open Customer Support &amp; Enquiry Desk &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchAuthMode(mode) {
+  const formSignIn = document.getElementById('form-signin');
+  const formSignUp = document.getElementById('form-signup');
+  const tabSignIn = document.getElementById('tab-signin');
+  const tabSignUp = document.getElementById('tab-signup');
+  const mainTitle = document.getElementById('auth-main-title');
+  const subTitle = document.getElementById('auth-sub-title');
+
+  if (mode === 'signup') {
+    formSignIn.style.display = 'none';
+    formSignUp.style.display = 'block';
+    tabSignIn.classList.remove('active');
+    tabSignUp.classList.add('active');
+    mainTitle.textContent = 'Create Shipper / Carrier Account';
+    subTitle.textContent = 'Register your logistics profile to access automated cold-chain claims and Pro Membership.';
+    window.history.replaceState(null, '', '/auth?mode=signup');
+  } else {
+    formSignUp.style.display = 'none';
+    formSignIn.style.display = 'block';
+    tabSignUp.classList.remove('active');
+    tabSignIn.classList.add('active');
+    mainTitle.textContent = 'Sign In to ClaimOS Engine';
+    subTitle.textContent = 'Access continuous thermal telemetry audit, Carmack claim packs, and portfolio recovery.';
+    window.history.replaceState(null, '', '/auth?mode=signin');
+  }
+}
+
+function fillDemoUser() {
+  document.getElementById('login_id').value = 'demo@coldchain.com';
+  document.getElementById('signin_password').value = 'password123';
+}
+
+function submitDemoAccess() {
+  const form = document.getElementById('form-demo-access');
+  if (form) form.submit();
+}
+</script>
+{% endblock %}

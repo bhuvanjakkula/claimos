@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" style="max-width: 980px; margin: 2rem auto 4rem auto;">
+
+  <!-- Support Header Banner -->
+  <div class="support-hero-card">
+    <div class="support-hero-content">
+      <div class="support-badge-chip">24/7 Escalation &amp; Recovery Desk</div>
+      <h1 class="support-hero-title">Customer Support &amp; Claim Enquiry</h1>
+      <p class="support-hero-desc">
+        Need assistance with a disputed refrigerated load, Carmack statutory notice deadline, Dock-Clean Trap defense, or Pro Membership billing? Our logistics recovery team is standing by.
+      </p>
+      
+      <div class="support-contact-strip">
+        <div class="contact-pill-item">
+          <span class="contact-pill-icon">&#9993;</span>
+          <div>
+            <div class="contact-pill-label">Primary Support &amp; Enquiry Email</div>
+            <a href="mailto:bjtmusic12@gmail.com" class="contact-pill-value">bjtmusic12@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-pill-item">
+          <span class="contact-pill-icon">&#9742;</span>
+          <div>
+            <div class="contact-pill-label">Cold-Chain Legal Dispatch Desk</div>
+            <span class="contact-pill-value">+1 (800) 492-CLAIM // Desk 12</span>
+          </div>
+        </div>
+        <div class="contact-pill-item">
+          <span class="contact-pill-icon">&#9201;</span>
+          <div>
+            <div class="contact-pill-label">Statutory Notice SLA</div>
+            <span class="contact-pill-value">&lt; 2 Hours (Carmack 48h Window)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submission Notification -->
+  {% if submitted and ticket %}
+  <div class="dock-trap-alert" style="background: #ecfdf5; border-color: #a7f3d0; border-left-color: #10b981; margin-bottom: 2rem;">
+    <div class="dock-trap-icon" style="background: #d1fae5; color: #059669;">&check;</div>
+    <div class="dock-trap-content">
+      <h4 style="color: #065f46;">Enquiry Successfully Dispatched &bull; Ticket Reference #{{ ticket }}</h4>
+      <p style="color: #047857; margin-bottom: 0.5rem;">
+        Your inquiry has been recorded and transmitted directly to our specialized support inbox at <a href="mailto:bjtmusic12@gmail.com" style="color: #047857; font-weight: 700;">bjtmusic12@gmail.com</a>. A claims engineer will review your telemetry and contact you within the statutory response SLA.
+      </p>
+      <a href="mailto:bjtmusic12@gmail.com?subject=Ticket%20{{ ticket }}%20Followup" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+        Send Additional Attachments to bjtmusic12@gmail.com &rarr;
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="support-grid">
+    <!-- Left: Interactive Enquiry Form -->
+    <div class="support-form-card">
+      <div class="card-title-bar">
+        <h3>Submit Official Enquiry or Support Request</h3>
+        <p>Fill out the details below. All inquiries are routed to <strong>bjtmusic12@gmail.com</strong>.</p>
+      </div>
+
+      <form method="post" action="/support/enquiry" class="support-form">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="full_name">Full Name <span class="required-star">*</span></label>
+            <input type="text" id="full_name" name="full_name" value="{% if current_user %}{{ current_user.full_name }}{% endif %}" placeholder="e.g. Rachel Sterling" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email ID <span class="required-star">*</span></label>
+            <input type="email" id="email" name="email" value="{% if current_user %}{{ current_user.email }}{% endif %}" placeholder="e.g. rachel@coldchain.com" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-top: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="mobile_number">Mobile Number <span class="required-star">*</span></label>
+            <input type="tel" id="mobile_number" name="mobile_number" value="{% if current_user %}{{ current_user.mobile_number }}{% endif %}" placeholder="e.g. +1 (555) 789-0123" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="category">Enquiry Category <span class="required-star">*</span></label>
+            <select id="category" name="category" required>
+              <option value="Carrier Claim Escalation">Carrier Claim Escalation / Denial</option>
+              <option value="Customer Pro Membership">Customer Pro Membership ($/mo USD)</option>
+              <option value="Dock-Clean Trap Telemetry">Dock-Clean Trap Telemetry Analysis</option>
+              <option value="Carmack Reservation Pack">Carmack 48-Hour Notice Generator</option>
+              <option value="General Support">General Support &amp; Questions</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+          <label class="form-label" for="subject">Subject / Shipment Reference <span class="required-star">*</span></label>
+          <input type="text" id="subject" name="subject" placeholder="e.g. Re: Urgent Excursion Review for SHP-88421" required>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+          <label class="form-label" for="message">Enquiry Message &amp; Telemetry Notes <span class="required-star">*</span></label>
+          <textarea id="message" name="message" rows="5" placeholder="Describe the carrier dispute, BOL setpoint discrepancy, excursion temperature details, or customer membership inquiry..." required></textarea>
+        </div>
+
+        <div style="margin-top: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="font-size: 0.8rem; color: #64748b;">
+            Direct CC recipient: <strong style="color: #0f172a;">bjtmusic12@gmail.com</strong>
+          </div>
+          <button type="submit" class="btn btn-primary" style="padding: 0.65rem 1.4rem;">
+            Submit Enquiry &rarr;
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right: Escalation Protocols & FAQ -->
+    <div class="support-info-sidebar">
+      <!-- Direct Contact Card -->
+      <div class="sidebar-box">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span>&#128222;</span> Direct Customer Contact
+        </h4>
+        <p style="font-size: 0.84rem; color: #475569; line-height: 1.5; margin-bottom: 1rem;">
+          For expedited reefer claims or urgent carrier settlement correspondence, email our lead logistics claims representative directly:
+        </p>
+        <div class="email-highlight-card">
+          <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #0369a1; letter-spacing: 0.04em;">Official Support Email</div>
+          <a href="mailto:bjtmusic12@gmail.com" style="font-size: 1rem; font-weight: 700; color: #0f172a; text-decoration: none; word-break: break-all;">
+            bjtmusic12@gmail.com
+          </a>
+        </div>
+        <a href="mailto:bjtmusic12@gmail.com?subject=Cold-Chain%20Claim%20Support%20Request" class="btn btn-dark" style="width: 100%; margin-top: 0.75rem; font-size: 0.84rem; padding: 0.55rem;">
+          Send Direct Email Now &rarr;
+        </a>
+      </div>
+
+      <!-- FAQ Card -->
+      <div class="sidebar-box" style="margin-top: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem;">Frequently Answered</h4>
+        
+        <div class="faq-item">
+          <div class="faq-q">What is the 48-Hour Reefer Download Demand?</div>
+          <div class="faq-a">Under 49 U.S.C. &sect; 14706, electronic trailer reefer micro-controller memory overwrites within 72&ndash;96 hours. ClaimOS demands instant electronic preservation before data wipe.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">How does Customer Pro Membership work?</div>
+          <div class="faq-a">Pro Membership is billed monthly in USA Dollars ($199/mo USD) and unlocks unlimited continuous excursion auditing, instant PDF Carmack notice generation, and direct escalation to <strong>bjtmusic12@gmail.com</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recorded Support Tickets -->
+  {% if enquiries %}
+  <div class="layer-section" style="margin-top: 2.5rem;">
+    <div class="layer-section-header">
+      <div class="layer-heading-group">
+        <span class="layer-tag" style="background: #0284c7;">INQUIRIES</span>
+        <div>
+          <h2 class="layer-title">Recent Customer Support &amp; Claim Enquiries</h2>
+          <div class="layer-description">Dispatched to bjtmusic12@gmail.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="layer-body">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Ticket ID</th>
+              <th>Date</th>
+              <th>Contact Name</th>
+              <th>Email &amp; Mobile</th>
+              <th>Category</th>
+              <th>Subject</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in enquiries %}
+            <tr>
+              <td class="mono-cell" style="font-weight: 700; color: #0284c7;">{{ t.ticket_id }}</td>
+              <td class="mono-cell" style="font-size: 0.8rem; color: #64748b;">{{ t.created_at.strftime('%Y-%m-%d %H:%M') if t.created_at else '' }}</td>
+              <td><strong>{{ t.full_name }}</strong></td>
+              <td style="font-size: 0.82rem;">
+                <div>{{ t.email }}</div>
+                <div style="color: #64748b;">{{ t.mobile_number }}</div>
+              </td>
+              <td><span class="badge badge-disputed" style="font-size: 0.72rem;">{{ t.category }}</span></td>
+              <td style="max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ t.message }}">
+                <strong>{{ t.subject }}</strong>
+              </td>
+              <td>
+                <span class="badge {% if t.status == 'Open' %}badge-carrier{% else %}badge-recovered{% endif %}">
+                  {{ t.status }}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

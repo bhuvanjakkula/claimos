@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaimOS &bull; Cold-Chain Freight Claim Recovery Engine</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="top-header">
+    <div class="top-bar-inner">
+      <div class="brand-section">
+        <a href="/#layer-combined" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem;">
+          <div class="brand-logo">&#10052;</div>
+          <div>
+            <div class="brand-title">ClaimOS <span style="font-weight: 400; opacity: 0.7; font-size: 0.9rem;">Freight Recovery</span></div>
+            <div class="brand-subtitle">Autonomous Cold-Chain Carmack Claim Engine</div>
+          </div>
+        </a>
+        <div class="status-indicator" style="margin-left: 0.75rem;">
+          <span class="status-dot"></span>
+          <span>ENGINE LOCAL // PORT 8000</span>
+        </div>
+      </div>
+
+      <nav class="layer-nav">
+        {% if has_paid_access %}
+        <a href="/dashboard" class="nav-link {% if active_layer == 'dashboard' or active_layer == 'combined' %}active{% endif %}">
+          <span>&loz; Dashboard Console</span>
+        </a>
+        <a href="/dashboard#layer-queue" class="nav-link">
+          <span class="layer-badge-num">01</span>
+          <span>Queue</span>
+        </a>
+        <a href="/dashboard#layer-audit" class="nav-link">
+          <span class="layer-badge-num">03</span>
+          <span>Audit</span>
+        </a>
+        <a href="/dashboard#layer-upload" class="nav-link">
+          <span class="layer-badge-num">04</span>
+          <span>Ingest</span>
+        </a>
+        <a href="/dashboard#layer-detail" class="nav-link">
+          <span class="layer-badge-num">05</span>
+          <span>Inspector</span>
+        </a>
+        <a href="/membership" class="nav-link {% if active_layer == 'membership' %}active{% endif %}">
+          <span class="layer-badge-num" style="background: #0284c7;">$</span>
+          <span>Membership</span>
+        </a>
+        {% else %}
+        <a href="/" class="nav-link {% if active_layer == 'first_layer' or active_layer == 'auth' %}active{% endif %}">
+          <span class="layer-badge-num" style="background: #0284c7;">01</span>
+          <span>Layer 01: Sign Up / Sign In</span>
+        </a>
+        <a href="/membership" class="nav-link {% if active_layer == 'membership' %}active{% endif %}">
+          <span class="layer-badge-num" style="background: #059669;">02</span>
+          <span>Layer 02: Payments ($ USD/mo)</span>
+        </a>
+        <a href="/dashboard" class="nav-link" title="Paid membership required to access dashboard">
+          <span class="layer-badge-num" style="background: #f59e0b;">🔒</span>
+          <span>Dashboard Engine</span>
+        </a>
+        {% endif %}
+      </nav>
+
+      <!-- Right Header Actions (Support & User Profile) -->
+      <div class="header-right-actions">
+        <!-- Customer Support Direct Link -->
+        <a href="/support" class="nav-action-pill support-pill" title="Customer Support & Enquiry: bjtmusic12@gmail.com">
+          <span class="nav-icon">&#9993;</span>
+          <span>Support &bull; <strong style="color: #0284c7;">bjtmusic12@gmail.com</strong></span>
+        </a>
+
+        <!-- User Authentication & Membership Status -->
+        {% if current_user %}
+        <div class="user-header-menu">
+          <div class="user-info-chip">
+            <span class="user-avatar-icon">&#128100;</span>
+            <div class="user-text-details">
+              <span class="user-display-email">{{ current_user.email }}</span>
+              <span class="user-display-sub">
+                {% if current_user.subscription_plan == 'pro' %}
+                  <span class="badge badge-carrier" style="font-size: 0.68rem; padding: 0.1rem 0.4rem; background: #e0f2fe; color: #0284c7; border-color: #7dd3fc;">&starf; PRO ($199/mo USD)</span>
+                {% elif current_user.subscription_plan == 'enterprise' %}
+                  <span class="badge badge-recovered" style="font-size: 0.68rem; padding: 0.1rem 0.4rem;">ENTERPRISE ($499/mo)</span>
+                {% elif current_user.subscription_plan == 'starter' %}
+                  <span class="badge badge-shipper" style="font-size: 0.68rem; padding: 0.1rem 0.4rem;">STARTER ($49/mo)</span>
+                {% else %}
+                  <span class="badge badge-no-claim" style="font-size: 0.68rem; padding: 0.1rem 0.4rem;">FREE TIER</span>
+                {% endif %}
+                {% if current_user.mobile_number %}&bull; {{ current_user.mobile_number }}{% endif %}
+              </span>
+            </div>
+          </div>
+          <a href="/auth/logout" class="nav-action-pill logout-btn" title="Sign Out">Sign Out</a>
+        </div>
+        {% else %}
+        <div class="auth-buttons-group">
+          <a href="/auth?mode=signin" class="nav-action-pill signin-btn">Sign In</a>
+          <a href="/auth?mode=signup" class="btn btn-primary" style="padding: 0.4rem 0.85rem; font-size: 0.82rem;">Sign Up</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {% block body %}{% endblock %}
+  </main>
+</body>
+</html>

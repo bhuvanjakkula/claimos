@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" id="layer-about">
+  <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+    <div>
+      <a href="/#layer-about" class="btn btn-outline" style="font-size: 0.82rem;">
+        &larr; Switch to All Layers Combined Console
+      </a>
+    </div>
+    <div>
+      <span class="badge badge-no-claim" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+        49 U.S.C. § 14706 Statutory Engine
+      </span>
+    </div>
+  </div>
+
+  <section class="layer-section">
+    <div class="layer-section-header">
+      <div class="layer-heading-group">
+        <span class="layer-tag" style="background: #334155;">LAYER 05</span>
+        <div>
+          <h2 class="layer-title">ClaimOS Architecture &amp; Statutory Carmack Engine</h2>
+          <div class="layer-description">Regulatory rules matrix, dock-clean trap countermeasure, and operational boundaries</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layer-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="statutory-card">
+          <h4>⚖️ Carmack Statutory Framework</h4>
+          <p>
+            Under the Carmack Amendment (<strong>49 U.S.C. § 14706</strong>), motor carriers are strictly liable for the actual loss or injury to property caused by the carrier. A prima facie claim requires establishing:
+          </p>
+          <ul style="margin: 0.75rem 0 0.75rem 1.5rem; font-size: 0.82rem; line-height: 1.7;">
+            <li>Delivery to carrier at origin in good condition (origin pulp &le; spec)</li>
+            <li>Arrival at destination in damaged or deteriorated condition</li>
+            <li>Specific quantifiable damages (declared value of affected cargo)</li>
+          </ul>
+          <p style="font-size: 0.82rem; color: #94a3b8;">
+            ClaimOS enforces the <strong>9-month notice of claim deadline</strong> and requires a formal 48-hour demand for the reefer micro-controller download before memory buffers overwrite.
+          </p>
+        </div>
+
+        <div class="statutory-card" style="background: #1e293b;">
+          <h4>🛡️ The "Dock-Clean Trap" Countermeasure</h4>
+          <p>
+            The #1 defense carriers exploit to deny refrigerated claims is the <strong>Dock-Clean Trap</strong>:
+          </p>
+          <p style="margin-top: 0.5rem; font-size: 0.82rem; color: #cbd5e1;">
+            A trailer reefer unit fails mid-route, causing cargo to spike to 12.8 °C. Before arriving at the destination, the unit is restarted, cooling the cargo back into range (6.4 °C) by delivery time. Standard handoff pulp checks report "in-spec", causing shippers to unknowingly forfeit claims.
+          </p>
+          <p style="margin-top: 0.5rem; font-size: 0.82rem; color: #38bdf8;">
+            ClaimOS continuously analyzes logger time-series telemetry to detect hidden in-transit excursions regardless of receiver dock temperature.
+          </p>
+        </div>
+      </div>
+
+      <!-- Rules Matrix Table -->
+      <div style="margin-top: 1.5rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: #0f172a;">
+          Deterministic Attribution Engine Decision Rules
+        </h4>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Condition / Telemetry Pattern</th>
+                <th>Attribution</th>
+                <th>Standard Carrier Defense</th>
+                <th>ClaimOS Defensible Pack Strategy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>No temperature setpoint specified on BOL</td>
+                <td><span class="badge badge-disputed">Disputed</span></td>
+                <td>Carrier set reefer according to customary standard</td>
+                <td>Flag evidence gap; audit booking confirmation &amp; rate con</td>
+              </tr>
+              <tr>
+                <td>Origin pulp temperature missing</td>
+                <td><span class="badge badge-disputed">Disputed</span></td>
+                <td>Cargo tendered warm at origin (shipper fault)</td>
+                <td>Request pre-cooling certificate &amp; shipper packhouse logs</td>
+              </tr>
+              <tr>
+                <td>Origin pulp temperature exceeds upper spec</td>
+                <td><span class="badge badge-shipper">Shipper</span></td>
+                <td>Warm loading; reefer maintains, does not blast chill</td>
+                <td>Direct claim to internal QA / origin vendor; drop carrier claim</td>
+              </tr>
+              <tr>
+                <td>Excursion begins after departure under carrier custody</td>
+                <td><span class="badge badge-carrier">Carrier</span></td>
+                <td>Inherent vice or latent product defect</td>
+                <td>Issue Carmack Notice &amp; 48-hr download demand; claim 100% loss</td>
+              </tr>
+              <tr>
+                <td>Clean telemetry within spec throughout run</td>
+                <td><span class="badge badge-no-claim">No Claim</span></td>
+                <td>Full temperature compliance</td>
+                <td>Close file immediately without costly unnecessary litigation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

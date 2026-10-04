@@ -1,0 +1,395 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" style="max-width: 1240px; margin: 1.5rem auto 4rem auto;">
+
+  <!-- Hero & Technology Utility Header -->
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <div class="brand-badge-pill" style="margin-bottom: 0.75rem;">
+      First Web Page Layer &bull; Technology Innovations &amp; Secure Access
+    </div>
+    <h1 style="font-size: 2.35rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; line-height: 1.25; margin-bottom: 0.75rem;">
+      Autonomous Cold-Chain Carmack Claim Recovery Engine
+    </h1>
+    <p style="font-size: 1.05rem; color: #475569; max-width: 860px; margin: 0 auto; line-height: 1.6;">
+      Deterministic thermodynamic telemetry forensics and statutory federal legal automation under <strong>49 U.S.C. § 14706</strong>. Protecting pharmaceutical biologics, perishable produce, vaccines, and frozen freight.
+    </p>
+
+    <!-- 3-Layer Workflow Ribbon -->
+    <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem;">
+      <span class="badge badge-carrier" style="background: #0284c7; color: #ffffff; font-weight: 700; padding: 0.4rem 0.85rem;">
+        Layer 01: Sign Up / Sign In &amp; Tech Innovations
+      </span>
+      <span style="color: #94a3b8; font-size: 1.1rem;">&rarr;</span>
+      <a href="/membership" class="badge badge-shipper" style="background: #e0f2fe; color: #0369a1; border-color: #bae6fd; font-weight: 700; padding: 0.4rem 0.85rem; text-decoration: none;">
+        Layer 02: Customer Pro Membership Payments ($ USD/mo)
+      </a>
+      <span style="color: #94a3b8; font-size: 1.1rem;">&rarr;</span>
+      <span class="badge badge-disputed" style="background: #ecfdf5; color: #047857; border-color: #a7f3d0; font-weight: 700; padding: 0.4rem 0.85rem;">
+        Layer 03: Carmack Claim Engine Dashboard
+      </span>
+    </div>
+  </div>
+
+  <!-- Messages / Alerts -->
+  {% if error == 'invalid_credentials' %}
+  <div class="auth-alert error" style="margin-bottom: 1.5rem;">
+    <span class="alert-icon">&times;</span>
+    <div><strong>Authentication Failed:</strong> Invalid Email ID, Mobile Number, or Password. Please try again.</div>
+  </div>
+  {% elif error == 'email_exists' %}
+  <div class="auth-alert error" style="margin-bottom: 1.5rem;">
+    <span class="alert-icon">&times;</span>
+    <div><strong>Account Already Exists:</strong> An account with this Email ID already exists. Please Sign In below.</div>
+  </div>
+  {% elif error == 'missing_fields' %}
+  <div class="auth-alert error" style="margin-bottom: 1.5rem;">
+    <span class="alert-icon">&times;</span>
+    <div><strong>Required Fields Missing:</strong> Please provide Email ID, Password, and Mobile Number.</div>
+  </div>
+  {% elif msg == 'logged_out' %}
+  <div class="auth-alert success" style="margin-bottom: 1.5rem;">
+    <span class="alert-icon">&check;</span>
+    <div>You have been safely signed out.</div>
+  </div>
+  {% elif msg == 'login_required_for_dashboard' or msg == 'paid_membership_required' %}
+  <div class="auth-alert info" style="margin-bottom: 1.5rem;">
+    <span class="alert-icon">&starf;</span>
+    <div><strong>Sign In or Subscribe to Access Dashboard:</strong> Without paying or signing in, dashboard engine functions are restricted. Please sign in or complete membership payment.</div>
+  </div>
+  {% endif %}
+
+  <!-- Main Grid: Technology Innovations (Left) & Sign In / Sign Up Console (Right) -->
+  <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 2rem; align-items: flex-start;">
+
+    <!-- LEFT COLUMN: Technology Utility & Breakthrough Innovations Showcase -->
+    <div style="background: linear-gradient(180deg, #0b1527 0%, #020617 100%); border: 2px solid #0284c7; border-radius: var(--radius-lg); padding: 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.25);">
+      
+      <div class="showcase-badges" style="margin-bottom: 1rem;">
+        <span class="tech-badge">Autonomous Cold-Chain Forensics</span>
+        <span class="tech-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(52, 211, 153, 0.35);">49 U.S.C. § 14706 Carmack Engine</span>
+        <span class="tech-badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(251, 191, 36, 0.35);">Telematics Anti-Spoliation</span>
+      </div>
+
+      <h2 style="font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.3; color: #ffffff; margin-bottom: 0.75rem;">
+        Why This Technology is Indispensable for Freight Recovery
+      </h2>
+      <p style="font-size: 0.92rem; color: #94a3b8; line-height: 1.6; margin-bottom: 1.5rem;">
+        Every year, global logistics suffers over <strong style="color: #38bdf8;">$35 Billion USD</strong> in perishable cargo losses. ClaimOS transforms disputed thermal excursions into verified, carrier-paid settlements by substituting subjective finger-pointing with deterministic thermodynamics and federal statutory notice automation.
+      </p>
+
+      <!-- 3 Utility Core Pillars -->
+      <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.75rem;">
+        <div style="font-weight: 700; color: #38bdf8; font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span>💡</span> Core Utility &amp; Strategic Protection
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.85rem; line-height: 1.55; color: #cbd5e1;">
+          <div>
+            <strong style="color: #ffffff;">1. Neutralizes the Carrier "Dock-Clean" Trap:</strong>
+            Reefers often fail mid-route, and carriers turn cooling units back on just before destination arrival to show a "clean" delivery pulp check. ClaimOS analyzes continuous logger telemetry to mathematically prove the intransit breach.
+          </div>
+          <div>
+            <strong style="color: #ffffff;">2. Enforces the Statutory Carmack 48-Hour Clock:</strong>
+            Under 49 U.S.C. § 14706 and commercial transport standards, carrier telematics overwrite every 48–72 hours. ClaimOS auto-dispatches formal preservation demands to secure reefer microprocessor downloads before spoliation.
+          </div>
+          <div>
+            <strong style="color: #ffffff;">3. Recovers Abandoned Capital from Dormant Claims:</strong>
+            Up to 60% of legitimate claims are written off due to carrier stall tactics. ClaimOS historical auditing surfaces and prepares re-filing dossiers for written-off and denied shipments.
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 Breakthrough Innovations Grid -->
+      <div style="font-weight: 700; color: #38bdf8; font-size: 0.95rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">
+        ★ 6 Breakthrough Innovations Built Into ClaimOS
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.75rem;">
+        
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-sm); padding: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem;">
+            INNOVATION 01 &bull; 🔬
+          </div>
+          <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff; margin-bottom: 0.35rem;">
+            Multi-Sensor Excursion Triangulation
+          </div>
+          <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+            Dynamic thermal inertia, ambient delta-T, and degree-hour severity calculation down to the second of carrier breach.
+          </div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: var(--radius-sm); padding: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: #fb7185; margin-bottom: 0.35rem;">
+            INNOVATION 02 &bull; 🛡️
+          </div>
+          <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff; margin-bottom: 0.35rem;">
+            Dock-Clean Counter-Strategy
+          </div>
+          <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+            Continuous core cooling curve modeling defeats carrier claims of "shipper warm loading" or receiver dock delay.
+          </div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-sm); padding: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem;">
+            INNOVATION 03 &bull; ⚖️
+          </div>
+          <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff; margin-bottom: 0.35rem;">
+            Carmack 48h Notice Dispatcher
+          </div>
+          <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+            Monitors statutory deadlines and compiles binding preservation demand notices before electronic logs are purged.
+          </div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-sm); padding: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem;">
+            INNOVATION 04 &bull; 📄
+          </div>
+          <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff; margin-bottom: 0.35rem;">
+            Court-Ready Forensic Claim Pack
+          </div>
+          <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+            Instantly synthesizes temperature graphs, BOL clean stamps, USDA tolerances, and damages into an unalterable PDF dossier.
+          </div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-sm); padding: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem;">
+            INNOVATION 05 &bull; 💼
+          </div>
+          <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff; margin-bottom: 0.35rem;">
+            Historical Dormant Value Audit
+          </div>
+          <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+            Automated crawler scans dormant, written-off files to re-file actionable Carmack claims within the 9-month window.
+          </div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-sm); padding: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem;">
+            INNOVATION 06 &bull; 🛰️
+          </div>
+          <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff; margin-bottom: 0.35rem;">
+            Anti-Spoliation Telematics Vault
+          </div>
+          <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+            Cryptographically anchors sensor files, GPS pings, and delivery timestamps to prevent evidence suppression.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 5-Step Telematics Flow Strip -->
+      <div class="showcase-flow-bar">
+        <div class="flow-step">
+          <span class="flow-step-num">STEP 01</span>
+          <span class="flow-step-text">Ingest CSV</span>
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-step">
+          <span class="flow-step-num">STEP 02</span>
+          <span class="flow-step-text">Thermodynamics</span>
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-step">
+          <span class="flow-step-num">STEP 03</span>
+          <span class="flow-step-text">Attribution</span>
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-step">
+          <span class="flow-step-num">STEP 04</span>
+          <span class="flow-step-text">48h Notice</span>
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-step active-step">
+          <span class="flow-step-num">STEP 05</span>
+          <span class="flow-step-text">&#10003; Capital Recovery</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Sign In and Sign Up Access Console -->
+    <div>
+      <div class="auth-card" style="box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border: 2px solid var(--border-strong);">
+        
+        <div class="auth-header">
+          <div class="brand-badge-pill">Secure Entry Portal</div>
+          <h2 class="auth-title" id="auth-main-title" style="font-size: 1.45rem;">
+            {% if mode == 'signup' %}Register Shipper / Carrier Account{% else %}Sign In to ClaimOS Engine{% endif %}
+          </h2>
+          <p class="auth-subtitle" id="auth-sub-title" style="font-size: 0.86rem;">
+            {% if mode == 'signup' %}
+              Create your account to proceed to the Second Layer (Customer Pro Membership Payments).
+            {% else %}
+              Enter your credentials to access the Carmack Claim Engine dashboard.
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- Strict Dashboard Access Policy Notice -->
+        <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #ef4444; border-radius: var(--radius-sm); padding: 0.75rem 0.9rem; margin-bottom: 1.25rem;">
+          <div style="font-size: 0.82rem; font-weight: 700; color: #991b1b; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem;">
+            <span>🔒</span> Strict Access Policy &bull; Paid Membership Required
+          </div>
+          <div style="font-size: 0.78rem; color: #7f1d1d; line-height: 1.45;">
+            Without paying money, customers cannot access the main dashboard. The Carmack Claim Recovery Engine and forensic telematics tools are reserved exclusively for paid subscribers.
+          </div>
+        </div>
+
+        <!-- Auth Tabs (Sign In / Sign Up) -->
+        <div class="auth-tabs" style="margin-bottom: 1.5rem;">
+          <button type="button" class="auth-tab-btn {% if mode != 'signup' %}active{% endif %}" id="tab-signin" onclick="switchFirstLayerMode('signin')">
+            Sign In
+          </button>
+          <button type="button" class="auth-tab-btn {% if mode == 'signup' %}active{% endif %}" id="tab-signup" onclick="switchFirstLayerMode('signup')">
+            Sign Up
+          </button>
+        </div>
+
+        <!-- SIGN IN FORM -->
+        <form id="form-signin" method="post" action="/auth/login" class="auth-form" style="{% if mode == 'signup' %}display: none;{% endif %}">
+          <div class="form-group" style="margin-bottom: 1.15rem;">
+            <label class="form-label" for="login_id">Email ID or Mobile Number <span class="required-star">*</span></label>
+            <div class="input-with-icon">
+              <input type="text" id="login_id" name="login_id" placeholder="name@company.com or +1 (555) 000-0000" required autofocus>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label class="form-label" for="signin_password">Password</label>
+              <a href="/support" style="font-size: 0.78rem; color: #0284c7; text-decoration: none;">Help &amp; Support</a>
+            </div>
+            <div class="input-with-icon">
+              <input type="password" id="signin_password" name="password" placeholder="Enter your password">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; font-weight: 700;">
+            Sign In &amp; Access Dashboard &rarr;
+          </button>
+
+          <!-- Quick Demo Access Fill -->
+          <div class="demo-quick-box" style="margin-top: 1.25rem;">
+            <div class="demo-quick-title">Quick Demo Shipper Credentials:</div>
+            <div class="demo-quick-credentials">
+              <span><strong>Email:</strong> demo@coldchain.com</span>
+              <span><strong>Password:</strong> password123</span>
+            </div>
+            <button type="button" class="btn btn-outline" style="width: 100%; font-size: 0.78rem; padding: 0.35rem; margin-top: 0.4rem;" onclick="fillDemoUser()">
+              Auto-Fill Demo Credentials
+            </button>
+          </div>
+        </form>
+
+        <!-- SIGN UP FORM -->
+        <form id="form-signup" method="post" action="/auth/signup" class="auth-form" style="{% if mode != 'signup' %}display: none;{% endif %}">
+          <div class="form-grid-2">
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label" for="su_name">Full Name</label>
+              <input type="text" id="su_name" name="full_name" placeholder="e.g. John Doe">
+            </div>
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label" for="su_company">Company / Organization</label>
+              <input type="text" id="su_company" name="company_name" placeholder="e.g. Polar Express Logistics">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="su_email">Email ID <span class="required-star">*</span></label>
+            <input type="email" id="su_email" name="email" placeholder="john.doe@company.com" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="su_mobile">Mobile Number <span class="required-star">*</span></label>
+            <input type="tel" id="su_mobile" name="mobile_number" placeholder="+1 (555) 234-5678" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.15rem;">
+            <label class="form-label" for="su_password">Create Password <span class="required-star">*</span></label>
+            <input type="password" id="su_password" name="password" placeholder="At least 6 characters" minlength="6" required>
+          </div>
+
+          <!-- Direct Pro Membership Activation Checkbox -->
+          <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1.15rem;">
+            <label style="display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: #0c4a6e; cursor: pointer;">
+              <input type="checkbox" name="activate_pro" value="yes" checked style="margin-top: 0.2rem;">
+              <span>
+                <strong>Activate Customer Pro Membership ($199.00 USD / month)</strong><br>
+                Billed monthly in USA Dollars. Unlocks full Carmack claim engine immediately after registration.
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; font-weight: 700;">
+            Create Account &amp; Proceed to Payments &rarr;
+          </button>
+        </form>
+
+        <!-- Second Web Page Layer Navigation Box -->
+        <div style="margin-top: 1.5rem; padding: 1rem; background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); text-align: center;">
+          <div style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: #64748b; margin-bottom: 0.35rem;">
+            Second Web Page Layer &bull; Payments
+          </div>
+          <div style="font-size: 0.85rem; color: #334155; margin-bottom: 0.65rem;">
+            Transparent USA Dollar Monthly Plans ($49, $199, $499 USD/mo).
+          </div>
+          <a href="/membership" class="btn btn-outline" style="width: 100%; font-size: 0.85rem; padding: 0.5rem; border-color: #0284c7; color: #0284c7; font-weight: 700;">
+            Go to Second Web Page Layer (Payments Page) &rarr;
+          </a>
+        </div>
+
+        <!-- Support and Contact Footer -->
+        <div class="auth-footer-help" style="margin-top: 1.25rem;">
+          <div style="font-size: 0.82rem; color: #64748b;">
+            Dedicated Customer Support &amp; Enquiries:
+          </div>
+          <div style="margin-top: 0.25rem;">
+            <a href="mailto:bjtmusic12@gmail.com" class="support-email-link"><strong>bjtmusic12@gmail.com</strong></a>
+          </div>
+          <div style="margin-top: 0.4rem;">
+            <a href="/support" style="font-size: 0.78rem; color: #0284c7; text-decoration: none;">
+              Open Customer Support Desk &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function switchFirstLayerMode(mode) {
+  const formSignIn = document.getElementById('form-signin');
+  const formSignUp = document.getElementById('form-signup');
+  const tabSignIn = document.getElementById('tab-signin');
+  const tabSignUp = document.getElementById('tab-signup');
+  const mainTitle = document.getElementById('auth-main-title');
+  const subTitle = document.getElementById('auth-sub-title');
+
+  if (mode === 'signup') {
+    formSignIn.style.display = 'none';
+    formSignUp.style.display = 'block';
+    tabSignIn.classList.remove('active');
+    tabSignUp.classList.add('active');
+    mainTitle.textContent = 'Register Shipper / Carrier Account';
+    subTitle.textContent = 'Create your account to proceed to the Second Layer (Customer Pro Membership Payments).';
+  } else {
+    formSignUp.style.display = 'none';
+    formSignIn.style.display = 'block';
+    tabSignUp.classList.remove('active');
+    tabSignIn.classList.add('active');
+    mainTitle.textContent = 'Sign In to ClaimOS Engine';
+    subTitle.textContent = 'Enter credentials or authorized email to unlock the Carmack Claim Engine dashboard.';
+  }
+}
+
+function fillDemoUser() {
+  document.getElementById('login_id').value = 'demo@coldchain.com';
+  document.getElementById('signin_password').value = 'password123';
+}
+</script>
+{% endblock %}

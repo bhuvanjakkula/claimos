@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" id="layer-detail">
+  <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+    <div>
+      <a href="/?ref={{ s.reference }}#layer-detail" class="btn btn-outline" style="font-size: 0.82rem;">
+        &larr; Switch to All Layers Combined Console
+      </a>
+    </div>
+    <div>
+      <a href="/shipment/{{ s.reference }}/pdf" class="btn btn-primary" target="_blank" style="font-size: 0.82rem;">
+        📄 Download Carmack PDF Pack
+      </a>
+    </div>
+  </div>
+
+  <section class="layer-section">
+    <div class="layer-section-header">
+      <div class="layer-heading-group">
+        <span class="layer-tag" style="background: #dc2626;">LAYER 04</span>
+        <div>
+          <h2 class="layer-title">Shipment File: {{ s.reference }}</h2>
+          <div class="layer-description">{{ s.commodity }} &bull; {{ s.shipper }} &rarr; {{ s.carrier }} &rarr; {{ s.receiver }}</div>
+        </div>
+      </div>
+      <div>
+        {% if a.attribution == 'carrier' %}
+          <span class="badge badge-carrier" style="font-size: 0.85rem; padding: 0.35rem 0.8rem;">Carrier Liable</span>
+        {% elif a.attribution == 'shipper' %}
+          <span class="badge badge-shipper" style="font-size: 0.85rem; padding: 0.35rem 0.8rem;">Shipper Fault</span>
+        {% elif a.attribution == 'disputed' %}
+          <span class="badge badge-disputed" style="font-size: 0.85rem; padding: 0.35rem 0.8rem;">Disputed</span>
+        {% else %}
+          <span class="badge badge-no-claim" style="font-size: 0.85rem; padding: 0.35rem 0.8rem;">{{ a.attribution }}</span>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="layer-body">
+      <!-- Dock Clean Trap Warning Banner -->
+      {% if a.dock_clean_trap %}
+      <div class="dock-trap-alert">
+        <div class="dock-trap-icon">⚠️</div>
+        <div class="dock-trap-content">
+          <h4>Dock-Clean Trap Detected (Carrier Defense Countered)</h4>
+          <p>
+            Continuous logger telemetry reveals cargo spiked to <strong>{{ a.peak_c }} °C</strong> during transit under carrier custody, then returned to <strong>{{ a.delivery_temp_c }} °C</strong> prior to delivery dock check. Standard receiver dock checks missed the excursion, but continuous telemetry preserves your Carmack claim right.
+          </p>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="inspector-grid">
+        <!-- Metadata & Attribution Column -->
+        <div class="meta-panel">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; color: #0f172a;">
+            File Specifications &amp; Claim Health
+          </h3>
+
+          <div class="meta-row">
+            <span class="meta-key">Commodity</span>
+            <span class="meta-val">{{ s.commodity }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Declared Value</span>
+            <span class="meta-val" style="color: #0284c7;">${{ '{:,.0f}'.format(s.declared_value_usd) }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Allowed Spec Range</span>
+            <span class="meta-val">{{ s.spec_min_c }} °C to {{ s.spec_max_c }} °C</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Origin Pulp / BOL Setpoint</span>
+            <span class="meta-val">{{ s.origin_pulp_c or 'N/A' }} °C / {{ s.bol_setpoint_c or 'N/A' }} °C</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Peak Observed Temp</span>
+            <span class="meta-val" style="color: #dc2626;">{{ a.peak_c or 'N/A' }} °C</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Carmack Notice Deadline</span>
+            <span class="meta-val">
+              {{ a.deadline_at }} ({{ a.hours_to_deadline }}h left)
+              {% if a.deadline_risk %}
+              <span class="risk-pill" style="margin-left: 0.35rem;">URGENT</span>
+              {% endif %}
+            </span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Attribution Rationale</span>
+            <span class="meta-val" style="font-weight: 500; font-size: 0.8rem; color: #475569; max-width: 60%;">
+              {{ a.rule or a.reason }}
+            </span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Missing Evidentiary Docs</span>
+            <span class="meta-val">
+              {% if a.missing_docs %}
+                {% for doc in a.missing_docs %}
+                  <span class="badge badge-shipper" style="font-size: 0.7rem;">{{ doc }}</span>
+                {% endfor %}
+              {% else %}
+                <span style="color: #059669; font-size: 0.82rem;">None (Complete)</span>
+              {% endif %}
+            </span>
+          </div>
+
+          <!-- Status & Recovery Form -->
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.78rem; text-transform: uppercase; font-weight: 600; color: #64748b; margin-bottom: 0.65rem;">
+              Update Claim Lifecycle Status
+            </div>
+            <form method="post" action="/shipment/{{ s.reference }}/status">
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+                <button type="submit" name="status" value="notice_sent" class="btn btn-outline" style="font-size: 0.76rem; padding: 0.35rem 0.65rem;">
+                  Mark Notice Sent
+                </button>
+                <button type="submit" name="status" value="denied" class="btn btn-outline" style="font-size: 0.76rem; padding: 0.35rem 0.65rem;">
+                  Deny
+                </button>
+                <button type="submit" name="status" value="written_off" class="btn btn-outline" style="font-size: 0.76rem; padding: 0.35rem 0.65rem;">
+                  Write Off
+                </button>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="number" step="0.01" name="recovered_usd" placeholder="Amount USD" style="width: 130px; font-size: 0.82rem;">
+                <button type="submit" name="status" value="recovered" class="btn btn-success" style="font-size: 0.78rem; padding: 0.45rem 0.85rem;">
+                  Record Recovery
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Excursions & Evidence Gaps Column -->
+        <div>
+          <div class="meta-panel" style="margin-bottom: 1.25rem;">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: #0f172a;">
+              Detected Excursions ({{ a.excursions | length }})
+            </h4>
+            <ul class="chronology-list">
+              {% for ex in a.excursions %}
+              <li class="chronology-item excursion-item">
+                <div>
+                  <div style="font-weight: 600; color: #dc2626;">Peak {{ ex.peak_c }} °C (Allowed &le; {{ s.spec_max_c }} °C)</div>
+                  <div style="font-size: 0.75rem; color: #64748b;" class="mono-cell">{{ ex.start }} &rarr; {{ ex.end }}</div>
+                </div>
+                <div>
+                  <span class="badge badge-carrier">{{ ex.party }}</span>
+                </div>
+              </li>
+              {% else %}
+              <li style="color: #64748b; font-size: 0.85rem;">No thermal excursions detected within record.</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="meta-panel">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: #0f172a;">
+              Evidence Gaps &amp; Anomalies ({{ a.gaps | length }})
+            </h4>
+            <ul class="chronology-list">
+              {% for g in a.gaps %}
+              <li class="chronology-item gap-item">
+                <div>
+                  <div style="font-weight: 600; color: #d97706;">{{ g.why }}</div>
+                  <div style="font-size: 0.75rem; color: #64748b;" class="mono-cell">{{ g.from }} &rarr; {{ g.to }} ({{ g.hours }}h)</div>
+                </div>
+                <div>
+                  <span class="badge badge-shipper">{{ g.kind }}</span>
+                </div>
+              </li>
+              {% else %}
+              <li style="color: #64748b; font-size: 0.85rem;">Continuous telemetry verified; no monitoring gaps.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Timeline Table -->
+      <div style="margin-top: 1.5rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: #0f172a;">
+          Logger Telemetry &amp; Custody Events Chronology ({{ events | length }} Readings)
+        </h4>
+        <div class="table-container" style="max-height: 280px; overflow-y: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp (UTC)</th>
+                <th>Event Type</th>
+                <th>Custody Party</th>
+                <th>Temp (°C)</th>
+                <th>Telemetry Notes &amp; Observations</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for e in events %}
+              <tr>
+                <td class="mono-cell">{{ e.at }}</td>
+                <td><span class="badge badge-no-claim">{{ e.type }}</span></td>
+                <td>
+                  {% if e.party == 'carrier' %}
+                    <span class="badge badge-carrier">{{ e.party }}</span>
+                  {% elif e.party == 'shipper' %}
+                    <span class="badge badge-shipper">{{ e.party }}</span>
+                  {% else %}
+                    <span class="badge badge-disputed">{{ e.party }}</span>
+                  {% endif %}
+                </td>
+                <td class="mono-cell" style="font-weight: 600; {% if e.temp_c and (e.temp_c < s.spec_min_c or e.temp_c > s.spec_max_c) %}color: #dc2626; font-weight: 700;{% endif %}">
+                  {{ e.temp_c if e.temp_c is not none else '-' }}
+                </td>
+                <td style="color: #475569; font-size: 0.82rem;">{{ e.note }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Formal Carmack Reservation Notice Editor -->
+      <div style="margin-top: 1.5rem; background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; color: #0f172a;">
+          Generated Carmack Notice &amp; 48-Hour Reefer Download Demand
+        </h4>
+        <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 0.75rem;">
+          This reservation notice is ready for carrier transmission. Editable directly below:
+        </p>
+        <form method="post" action="/shipment/{{ s.reference }}/notice">
+          <textarea name="notice" style="height: 140px; font-family: var(--font-mono); font-size: 0.82rem; margin-bottom: 0.75rem;">{{ s.notice }}</textarea>
+          <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+            <button type="submit" class="btn btn-dark">Save Notice Edits</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
