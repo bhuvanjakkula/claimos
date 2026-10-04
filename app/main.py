@@ -620,6 +620,19 @@ def auth_login(
         return response
 
 
+@app.get("/auth/login")
+def auth_login_get(login_id: str = "", email: str = ""):
+    target_email = (login_id or email).strip().lower()
+    if target_email == OWNER_EMAIL.lower():
+        return owner_direct_login()
+    return RedirectResponse("/auth?mode=signin", status_code=303)
+
+
+@app.get("/auth/signup")
+def auth_signup_get():
+    return RedirectResponse("/auth?mode=signup", status_code=303)
+
+
 @app.get("/owner-login")
 @app.post("/owner-login")
 def owner_direct_login():
@@ -737,10 +750,11 @@ STRIPE_CHECKOUT_URLS = {
 }
 
 
+@app.get("/membership/subscribe")
 @app.post("/membership/subscribe")
 def subscribe_membership(
     request: Request,
-    plan_name: str = Form("pro"),
+    plan_name: str = "pro",
 ):
     plan_clean = plan_name.strip().lower()
     target_stripe_url = STRIPE_CHECKOUT_URLS.get(plan_clean, STRIPE_CHECKOUT_URLS["pro"])
