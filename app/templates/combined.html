@@ -476,16 +476,9 @@
             {% if current_user and current_user.subscription_plan == 'starter' and current_user.subscription_status == 'active' %}
               <button type="button" class="btn btn-outline" style="width: 100%;" disabled>Current Active Plan</button>
             {% else %}
-              <a href="https://buy.stripe.com/test_fZu28j6mTeOVfbP7CfcjS04" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.65rem; font-weight: 700; background: #635bff; border-color: #635bff; color: #ffffff; margin-bottom: 0.4rem; box-shadow: 0 4px 12px rgba(99, 91, 255, 0.25);">
+              <a href="https://buy.stripe.com/test_fZu28j6mTeOVfbP7CfcjS04" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.65rem; font-weight: 700; background: #635bff; border-color: #635bff; color: #ffffff; box-shadow: 0 4px 12px rgba(99, 91, 255, 0.25);">
                 <span>💳 Pay $49/mo via Stripe &rarr;</span>
               </a>
-              <form method="post" action="/membership/subscribe">
-                <input type="hidden" name="plan_name" value="starter">
-                <input type="hidden" name="amount_usd" value="49.00">
-                <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 0.76rem; padding: 0.35rem;">
-                  ⚡ Instant 1-Click Test Activation ($49/mo)
-                </button>
-              </form>
             {% endif %}
           </div>
         </div>
@@ -515,16 +508,9 @@
             {% if current_user and current_user.subscription_plan == 'pro' and current_user.subscription_status == 'active' %}
               <div class="active-plan-badge">★ Active Customer Pro Member</div>
             {% else %}
-              <a href="https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg, #635bff 0%, #0284c7 100%); border: none; color: #ffffff; margin-bottom: 0.4rem; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
+              <a href="https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg, #635bff 0%, #0284c7 100%); border: none; color: #ffffff; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
                 <span>💳 Pay $199/mo via Stripe &rarr;</span>
               </a>
-              <form method="post" action="/membership/subscribe">
-                <input type="hidden" name="plan_name" value="pro">
-                <input type="hidden" name="amount_usd" value="199.00">
-                <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 0.76rem; padding: 0.35rem; border-color: #0284c7; color: #0284c7;">
-                  ⚡ Instant 1-Click Test Activation ($199/mo)
-                </button>
-              </form>
             {% endif %}
           </div>
         </div>
@@ -552,16 +538,9 @@
             {% if current_user and current_user.subscription_plan == 'enterprise' and current_user.subscription_status == 'active' %}
               <button type="button" class="btn btn-outline" style="width: 100%;" disabled>Current Active Plan</button>
             {% else %}
-              <a href="https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06" target="_blank" rel="noopener noreferrer" class="btn btn-dark" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.65rem; font-weight: 700; background: #0f172a; border-color: #0f172a; color: #ffffff; margin-bottom: 0.4rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);">
+              <a href="https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06" target="_blank" rel="noopener noreferrer" class="btn btn-dark" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.65rem; font-weight: 700; background: #0f172a; border-color: #0f172a; color: #ffffff; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);">
                 <span>💳 Pay $499/mo via Stripe &rarr;</span>
               </a>
-              <form method="post" action="/membership/subscribe">
-                <input type="hidden" name="plan_name" value="enterprise">
-                <input type="hidden" name="amount_usd" value="499.00">
-                <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 0.76rem; padding: 0.35rem;">
-                  ⚡ Instant 1-Click Test Activation ($499/mo)
-                </button>
-              </form>
             {% endif %}
           </div>
         </div>

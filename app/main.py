@@ -544,43 +544,22 @@ def auth_signup(
         if existing:
             return RedirectResponse("/auth?mode=signin&error=email_exists", status_code=303)
 
-        is_pro = bool(activate_pro and activate_pro.strip())
         new_user = User(
             email=email_clean,
             password_hash=hash_password(password),
             mobile_number=mobile_clean,
             full_name=full_name.strip() or email_clean.split("@")[0].title(),
             company_name=company_name.strip(),
-            subscription_plan="pro" if is_pro else "free",
-            subscription_status="active" if is_pro else "inactive",
-            monthly_amount_usd=199.0 if is_pro else 0.0,
-            card_brand="Visa" if is_pro else "",
-            card_last4="4242" if is_pro else "",
-            subscribed_at=datetime.now(timezone.utc) if is_pro else None,
-            next_billing_at=(datetime.now(timezone.utc) + timedelta(days=30)) if is_pro else None,
+            subscription_plan="free",
+            subscription_status="inactive",
+            monthly_amount_usd=0.0,
         )
         db.add(new_user)
-        db.flush()
-
-        if is_pro:
-            inv = Invoice(
-                user_id=new_user.id,
-                invoice_number=f"INV-2026-{secrets.token_hex(3).upper()}",
-                plan_name="ClaimOS Pro Recovery Plan (Billed Monthly)",
-                amount_usd=199.0,
-                billing_cycle="Monthly (USD)",
-                status="Paid",
-                card_brand="Visa",
-                card_last4="4242",
-                paid_at=datetime.now(timezone.utc),
-            )
-            db.add(inv)
-
         db.commit()
         db.refresh(new_user)
 
-        target_url = "/dashboard?msg=subscribed_unlocked" if is_pro else "/membership?msg=registered_activate"
-        response = RedirectResponse(target_url, status_code=303)
+        # Strictly redirect new users to membership page to pay via Stripe before dashboard access
+        response = RedirectResponse("/membership?msg=paid_membership_required", status_code=303)
         set_user_cookie(response, new_user)
         return response
 
@@ -633,20 +612,9 @@ def auth_login(
         if is_paid_subscriber(user):
             response = RedirectResponse("/dashboard?msg=logged_in", status_code=303)
         else:
-            response = RedirectResponse("/membership?msg=subscribe_required", status_code=303)
+            response = RedirectResponse("/membership?msg=paid_membership_required", status_code=303)
         set_user_cookie(response, user)
         return response
-
-
-@app.post("/auth/demo-access")
-def auth_demo_access():
-    with SessionLocal() as db:
-        user = db.scalar(select(User).where(User.email == "demo@coldchain.com"))
-        if user:
-            response = RedirectResponse("/dashboard?msg=demo_unlocked", status_code=303)
-            set_user_cookie(response, user)
-            return response
-    return RedirectResponse("/auth?mode=signin", status_code=303)
 
 
 @app.get("/auth/logout")
@@ -730,75 +698,21 @@ def membership_page(request: Request, msg: str = "", ref: str = ""):
         })
 
 
+STRIPE_CHECKOUT_URLS = {
+    "starter": "https://buy.stripe.com/test_fZu28j6mTeOVfbP7CfcjS04",
+    "pro": "https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05",
+    "enterprise": "https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06",
+}
+
+
 @app.post("/membership/subscribe")
 def subscribe_membership(
     request: Request,
-    plan_name: str = Form(...),
-    amount_usd: float = Form(...),
-    card_brand: str = Form("Visa"),
-    card_last4: str = Form("4242"),
-    guest_email: str = Form(""),
-    guest_mobile: str = Form(""),
-    guest_password: str = Form(""),
+    plan_name: str = Form("pro"),
 ):
-    with SessionLocal() as db:
-        user = get_current_user(request, db)
-        created_cookie_user = None
-
-        if not user:
-            if guest_email and guest_email.strip():
-                clean_email = guest_email.strip().lower()
-                clean_mobile = guest_mobile.strip() or "+1 (555) 000-1234"
-                clean_pw = guest_password.strip() or "password123"
-                user = db.scalar(select(User).where(User.email == clean_email))
-                if not user:
-                    user = User(
-                        email=clean_email,
-                        password_hash=hash_password(clean_pw),
-                        mobile_number=clean_mobile,
-                        full_name=clean_email.split("@")[0].title(),
-                        subscription_plan="free",
-                        subscription_status="inactive",
-                        monthly_amount_usd=0.0,
-                    )
-                    db.add(user)
-                    db.flush()
-                created_cookie_user = user
-            else:
-                return RedirectResponse("/auth?mode=signup&msg=subscribe_auth_required", status_code=303)
-
-        user.subscription_plan = plan_name.strip().lower()
-        user.subscription_status = "active"
-        user.monthly_amount_usd = float(amount_usd)
-        user.card_brand = card_brand.strip()
-        user.card_last4 = card_last4.strip()
-        user.subscribed_at = datetime.now(timezone.utc)
-        user.next_billing_at = datetime.now(timezone.utc) + timedelta(days=30)
-
-        plan_display = {
-            "starter": "ClaimOS Starter Cargo Plan",
-            "pro": "ClaimOS Pro Recovery Plan",
-            "enterprise": "ClaimOS Enterprise Fleet Plan",
-        }.get(user.subscription_plan, f"ClaimOS {user.subscription_plan.title()} Plan")
-
-        inv = Invoice(
-            user_id=user.id,
-            invoice_number=f"INV-2026-{secrets.token_hex(3).upper()}",
-            plan_name=plan_display,
-            amount_usd=float(amount_usd),
-            billing_cycle="Monthly (USD)",
-            status="Paid",
-            card_brand=card_brand.strip(),
-            card_last4=card_last4.strip(),
-            paid_at=datetime.now(timezone.utc),
-        )
-        db.add(inv)
-        db.commit()
-
-        response = RedirectResponse("/dashboard?msg=payment_confirmed", status_code=303)
-        if created_cookie_user:
-            set_user_cookie(response, created_cookie_user)
-        return response
+    plan_clean = plan_name.strip().lower()
+    target_stripe_url = STRIPE_CHECKOUT_URLS.get(plan_clean, STRIPE_CHECKOUT_URLS["pro"])
+    return RedirectResponse(target_stripe_url, status_code=303)
 
 
 @app.post("/membership/cancel")

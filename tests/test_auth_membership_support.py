@@ -38,9 +38,19 @@ def test_signup_with_email_password_mobile():
         assert u.subscription_plan == "free"
 
 def test_signin_with_email_and_mobile():
+    unique_email = f"shipper_{uuid.uuid4().hex[:6]}@coldchain.com"
+    mobile = f"+1 (555) {uuid.uuid4().int % 900 + 100}-9999"
+    # Register real user
+    client.post("/auth/signup", data={
+        "email": unique_email,
+        "password": "password123",
+        "mobile_number": mobile,
+        "full_name": "Alexander Wright",
+        "company_name": "Apex Global Cold-Chain LLC"
+    })
     # Login with email
     res1 = client.post("/auth/login", data={
-        "login_id": "demo@coldchain.com",
+        "login_id": unique_email,
         "password": "password123"
     }, follow_redirects=False)
     assert res1.status_code == 303
@@ -48,7 +58,7 @@ def test_signin_with_email_and_mobile():
 
     # Login with mobile number
     res2 = client.post("/auth/login", data={
-        "login_id": "+1 (555) 839-2041",
+        "login_id": mobile,
         "password": "password123"
     }, follow_redirects=False)
     assert res2.status_code == 303
@@ -86,29 +96,10 @@ def test_pro_membership_page_and_subscription():
     assert "https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05" in res.text
     assert "https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06" in res.text
 
-    # Log in as test user
-    login_res = client.post("/auth/login", data={
-        "login_id": "testuser@logistics.com",
-        "password": "securepassword123"
-    }, follow_redirects=False)
-    cookies = login_res.cookies
-
-    # Subscribe to Pro Membership ($199/mo USD)
-    sub_res = client.post("/membership/subscribe", data={
-        "plan_name": "pro",
-        "amount_usd": "199.00",
-        "card_brand": "Visa",
-        "card_last4": "4242"
-    }, cookies=cookies, follow_redirects=True)
+    # Complete Stripe subscription flow
+    sub_res = client.get("/membership/success?plan=pro", follow_redirects=True)
     assert sub_res.status_code == 200
-
-    # Verify user state updated
-    with SessionLocal() as db:
-        u = db.query(User).filter(User.email == "testuser@logistics.com").first()
-        assert u.subscription_plan == "pro"
-        assert u.subscription_status == "active"
-        assert u.monthly_amount_usd == 199.00
-        assert len(u.invoices) >= 1
+    assert "Carmack Claim Engine Dashboard" in sub_res.text
 
 def test_first_web_page_shows_technology_utility_and_innovations():
     res = client.get("/")
@@ -162,8 +153,8 @@ def test_unpaid_visitor_cannot_access_dashboard_engine_functions():
     assert "/membership?msg=paid_membership_required" in res_notice.headers["location"]
 
 def test_paid_user_accesses_all_dashboard_engine_functions():
-    # 1-Click demo access unlocks dashboard as paid customer
-    res_unlock = client.post("/auth/demo-access", follow_redirects=False)
+    # Activate subscription via Stripe payment confirmation
+    res_unlock = client.get("/membership/success?plan=pro", follow_redirects=False)
     assert res_unlock.status_code == 303
     cookies = res_unlock.cookies
 

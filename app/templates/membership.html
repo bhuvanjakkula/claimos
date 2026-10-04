@@ -43,20 +43,13 @@
     </div>
   </div>
   {% else %}
-  <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.25rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-    <div>
-      <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem; margin-bottom: 0.2rem;">
-        ⚡ Instant Dashboard Engine Access Guarantee
-      </div>
-      <div style="color: #64748b; font-size: 0.85rem;">
-        Subscribing to any plan below instantly unlocks all dashboard engine functions (Queue, Telematics CSV Ingest, Carmack Notice Generation, and PDF Proof Dossiers).
-      </div>
+  <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.25rem 1.5rem; margin-bottom: 2rem;">
+    <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem; margin-bottom: 0.2rem;">
+      🔒 Direct Stripe Checkout Required
     </div>
-    <form method="post" action="/auth/demo-access" style="margin: 0;">
-      <button type="submit" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.55rem 1.15rem; font-weight: 700;">
-        ⚡ 1-Click Instant Demo Unlock
-      </button>
-    </form>
+    <div style="color: #64748b; font-size: 0.85rem;">
+      Select your preferred monthly plan below to complete payment securely via Stripe. Completing checkout instantly unlocks all dashboard engine features (Excursion Telematics Ingestion, Carmack 48-Hour Legal Notices, and Audit Dossiers).
+    </div>
   </div>
   {% endif %}
 
@@ -87,20 +80,13 @@
       <div class="plan-action">
         {% if current_user and current_user.subscription_plan == 'starter' and current_user.subscription_status == 'active' %}
           <div class="active-plan-badge" style="margin-bottom: 0.5rem;">&starf; Current Active Starter Plan</div>
-          <a href="https://buy.stripe.com/test_fZu28j6mTeOVfbP7CfcjS04" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.5rem; font-weight: 600; font-size: 0.8rem; margin-bottom: 0.5rem;">
+          <a href="https://buy.stripe.com/test_fZu28j6mTeOVfbP7CfcjS04" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.5rem; font-weight: 600; font-size: 0.8rem;">
             <span>💳 Direct Stripe Link ($49/mo) &rarr;</span>
           </a>
         {% else %}
-          <a href="https://buy.stripe.com/test_fZu28j6mTeOVfbP7CfcjS04" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-weight: 700; background: #635bff; border-color: #635bff; color: #ffffff; margin-bottom: 0.5rem; box-shadow: 0 4px 12px rgba(99, 91, 255, 0.25);">
+          <a href="https://buy.stripe.com/test_fZu28j6mTeOVfbP7CfcjS04" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-weight: 700; background: #635bff; border-color: #635bff; color: #ffffff; box-shadow: 0 4px 12px rgba(99, 91, 255, 0.25);">
             <span>💳 Pay $49/mo via Stripe &rarr;</span>
           </a>
-          <form method="post" action="/membership/subscribe">
-            <input type="hidden" name="plan_name" value="starter">
-            <input type="hidden" name="amount_usd" value="49.00">
-            <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 0.78rem; padding: 0.4rem;">
-              ⚡ Instant 1-Click Test Activation ($49/mo)
-            </button>
-          </form>
         {% endif %}
       </div>
     </div>
@@ -131,20 +117,13 @@
       <div class="plan-action">
         {% if current_user and current_user.subscription_plan == 'pro' and current_user.subscription_status == 'active' %}
           <div class="active-plan-badge" style="margin-bottom: 0.5rem;">&starf; Currently Subscribed Pro Member</div>
-          <a href="https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-weight: 800; font-size: 0.95rem; background: linear-gradient(135deg, #635bff 0%, #0284c7 100%); border: none; color: #ffffff; margin-bottom: 0.5rem; box-shadow: 0 4px 14px rgba(99, 91, 255, 0.35);">
+          <a href="https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-weight: 800; font-size: 0.95rem; background: linear-gradient(135deg, #635bff 0%, #0284c7 100%); border: none; color: #ffffff; box-shadow: 0 4px 14px rgba(99, 91, 255, 0.35);">
             <span>💳 Direct Stripe Checkout ($199/mo) &rarr;</span>
           </a>
         {% else %}
-          <a href="https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.85rem; font-size: 1.02rem; font-weight: 800; background: linear-gradient(135deg, #635bff 0%, #0284c7 100%); border: none; color: #ffffff; margin-bottom: 0.5rem; box-shadow: 0 6px 18px rgba(99, 91, 255, 0.35);">
+          <a href="https://buy.stripe.com/test_14AdR1fXtgX37Jn7CfcjS05" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.85rem; font-size: 1.02rem; font-weight: 800; background: linear-gradient(135deg, #635bff 0%, #0284c7 100%); border: none; color: #ffffff; box-shadow: 0 6px 18px rgba(99, 91, 255, 0.35);">
             <span>💳 Pay $199/mo via Stripe &rarr;</span>
           </a>
-          <form method="post" action="/membership/subscribe">
-            <input type="hidden" name="plan_name" value="pro">
-            <input type="hidden" name="amount_usd" value="199.00">
-            <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 0.8rem; padding: 0.4rem; border-color: #0284c7; color: #0284c7;">
-              ⚡ Instant 1-Click Test Activation ($199/mo)
-            </button>
-          </form>
         {% endif %}
       </div>
     </div>
@@ -173,20 +152,13 @@
       <div class="plan-action">
         {% if current_user and current_user.subscription_plan == 'enterprise' and current_user.subscription_status == 'active' %}
           <div class="active-plan-badge" style="margin-bottom: 0.5rem;">&starf; Current Active Enterprise Plan</div>
-          <a href="https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.5rem; font-weight: 600; font-size: 0.8rem; margin-bottom: 0.5rem;">
+          <a href="https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.5rem; font-weight: 600; font-size: 0.8rem;">
             <span>💳 Direct Stripe Link ($499/mo) &rarr;</span>
           </a>
         {% else %}
-          <a href="https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06" target="_blank" rel="noopener noreferrer" class="btn btn-dark" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-weight: 700; background: #0f172a; border-color: #0f172a; color: #ffffff; margin-bottom: 0.5rem; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);">
+          <a href="https://buy.stripe.com/test_cNi14feTp8qxd3H1dRcjS06" target="_blank" rel="noopener noreferrer" class="btn btn-dark" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.75rem; font-weight: 700; background: #0f172a; border-color: #0f172a; color: #ffffff; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);">
             <span>💳 Pay $499/mo via Stripe &rarr;</span>
           </a>
-          <form method="post" action="/membership/subscribe">
-            <input type="hidden" name="plan_name" value="enterprise">
-            <input type="hidden" name="amount_usd" value="499.00">
-            <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 0.78rem; padding: 0.4rem;">
-              ⚡ Instant 1-Click Test Activation ($499/mo)
-            </button>
-          </form>
         {% endif %}
       </div>
     </div>

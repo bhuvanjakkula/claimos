@@ -88,35 +88,10 @@ def seed_users(db):
         owner.subscription_plan = "enterprise"
         db.commit()
 
-    if not db.scalar(select(User).where(User.email == "demo@coldchain.com")):
-        demo_user = User(
-            email="demo@coldchain.com",
-            password_hash=hash_password("password123"),
-            mobile_number="+1 (555) 839-2041",
-            full_name="Alexander Wright",
-            company_name="Apex Global Cold-Chain LLC",
-            subscription_plan="pro",
-            subscription_status="active",
-            monthly_amount_usd=199.0,
-            card_brand="Visa",
-            card_last4="4242",
-            subscribed_at=datetime.now(timezone.utc) - timedelta(days=12),
-            next_billing_at=datetime.now(timezone.utc) + timedelta(days=18),
-        )
-        db.add(demo_user)
-        db.flush()
-        inv = Invoice(
-            user_id=demo_user.id,
-            invoice_number="INV-2026-0981",
-            plan_name="ClaimOS Pro Recovery Membership",
-            amount_usd=199.0,
-            billing_cycle="Monthly",
-            status="Paid",
-            card_brand="Visa",
-            card_last4="4242",
-            paid_at=datetime.now(timezone.utc) - timedelta(days=12),
-        )
-        db.add(inv)
+    # Ensure demo user is purged
+    demo_user = db.scalar(select(User).where(User.email == "demo@coldchain.com"))
+    if demo_user:
+        db.delete(demo_user)
         db.commit()
 
 

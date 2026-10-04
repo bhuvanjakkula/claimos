@@ -268,18 +268,6 @@
           <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; font-weight: 700;">
             Sign In &amp; Access Dashboard &rarr;
           </button>
-
-          <!-- Quick Demo Access Fill -->
-          <div class="demo-quick-box" style="margin-top: 1.25rem;">
-            <div class="demo-quick-title">Quick Demo Shipper Credentials:</div>
-            <div class="demo-quick-credentials">
-              <span><strong>Email:</strong> demo@coldchain.com</span>
-              <span><strong>Password:</strong> password123</span>
-            </div>
-            <button type="button" class="btn btn-outline" style="width: 100%; font-size: 0.78rem; padding: 0.35rem; margin-top: 0.4rem;" onclick="fillDemoUser()">
-              Auto-Fill Demo Credentials
-            </button>
-          </div>
         </form>
 
         <!-- SIGN UP FORM -->
@@ -310,19 +298,12 @@
             <input type="password" id="su_password" name="password" placeholder="At least 6 characters" minlength="6" required>
           </div>
 
-          <!-- Direct Pro Membership Activation Checkbox -->
-          <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1.15rem;">
-            <label style="display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: #0c4a6e; cursor: pointer;">
-              <input type="checkbox" name="activate_pro" value="yes" checked style="margin-top: 0.2rem;">
-              <span>
-                <strong>Activate Customer Pro Membership ($199.00 USD / month)</strong><br>
-                Billed monthly in USA Dollars. Unlocks full Carmack claim engine immediately after registration.
-              </span>
-            </label>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1.15rem; font-size: 0.82rem; color: #475569;">
+            🔒 <strong>Paid Subscription Required:</strong> Access to the Carmack Claim Engine dashboard is strictly reserved for paid subscribers (Starter $49/mo, Pro $199/mo, Enterprise $499/mo). Creating your account will proceed directly to the secure Stripe checkout.
           </div>
 
           <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; font-weight: 700;">
-            Create Account &amp; Proceed to Payments &rarr;
+            Create Account &amp; Proceed to Stripe Checkout &rarr;
           </button>
         </form>
 
@@ -385,11 +366,6 @@ function switchFirstLayerMode(mode) {
     mainTitle.textContent = 'Sign In to ClaimOS Engine';
     subTitle.textContent = 'Enter credentials or authorized email to unlock the Carmack Claim Engine dashboard.';
   }
-}
-
-function fillDemoUser() {
-  document.getElementById('login_id').value = 'demo@coldchain.com';
-  document.getElementById('signin_password').value = 'password123';
 }
 </script>
 {% endblock %}

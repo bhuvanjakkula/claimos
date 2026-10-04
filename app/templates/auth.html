@@ -96,17 +96,6 @@
       <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem;">
         Sign In to Console &rarr;
       </button>
-
-      <div class="demo-quick-box">
-        <div class="demo-quick-title">Quick Demo Login:</div>
-        <div class="demo-quick-credentials">
-          <span><strong>Email:</strong> demo@coldchain.com</span>
-          <span><strong>Password:</strong> password123</span>
-        </div>
-        <button type="button" class="btn btn-outline" style="width: 100%; font-size: 0.78rem; padding: 0.35rem;" onclick="fillDemoUser()">
-          Fill Demo Shipper Credentials
-        </button>
-      </div>
     </form>
 
     <!-- SIGN UP FORM -->
@@ -138,18 +127,8 @@
         <input type="password" id="su_password" name="password" placeholder="At least 6 characters" minlength="6" required>
       </div>
 
-      <!-- Pro Membership Activation Choice -->
-      <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: var(--radius-sm); padding: 0.9rem; margin-bottom: 1.25rem;">
-        <div style="font-weight: 700; color: #0369a1; font-size: 0.88rem; margin-bottom: 0.35rem;">
-          ★ Customer Pro Membership Activation ($ USD / Month)
-        </div>
-        <label style="display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: #0c4a6e; cursor: pointer;">
-          <input type="checkbox" name="activate_pro" value="yes" checked style="margin-top: 0.2rem;">
-          <span>
-            <strong>Activate Customer Pro Membership ($199.00 USD / month)</strong><br>
-            Instantly unlocks all dashboard engine functions (Telematics Ingestion, Carmack Notices, PDF Packs). Billed monthly in USA Dollars.
-          </span>
-        </label>
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1.15rem; font-size: 0.82rem; color: #475569;">
+        🔒 <strong>Paid Subscription Required:</strong> Access to the Carmack Claim Engine dashboard is strictly reserved for paid subscribers (Starter $49/mo, Pro $199/mo, Enterprise $499/mo). Creating your account will proceed directly to the secure Stripe checkout.
       </div>
 
       <div class="auth-terms">
@@ -157,19 +136,9 @@
       </div>
 
       <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.75rem;">
-        Create Account &amp; Unlock Dashboard &rarr;
+        Create Account &amp; Proceed to Stripe Checkout &rarr;
       </button>
-
-      <div style="margin-top: 1rem; text-align: center;">
-        <span style="font-size: 0.8rem; color: #64748b;">Or test immediately without form:</span><br>
-        <button type="button" class="btn btn-outline" style="margin-top: 0.35rem; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-color: #10b981; color: #047857;" onclick="submitDemoAccess()">
-          ⚡ 1-Click Instant Demo Subscriber Access
-        </button>
-      </div>
     </form>
-
-    <!-- Hidden form for 1-click demo access -->
-    <form id="form-demo-access" method="post" action="/auth/demo-access" style="display: none;"></form>
 
     <!-- Support and Contact Footer -->
     <div class="auth-footer-help">
@@ -215,16 +184,6 @@ function switchAuthMode(mode) {
     subTitle.textContent = 'Access continuous thermal telemetry audit, Carmack claim packs, and portfolio recovery.';
     window.history.replaceState(null, '', '/auth?mode=signin');
   }
-}
-
-function fillDemoUser() {
-  document.getElementById('login_id').value = 'demo@coldchain.com';
-  document.getElementById('signin_password').value = 'password123';
-}
-
-function submitDemoAccess() {
-  const form = document.getElementById('form-demo-access');
-  if (form) form.submit();
 }
 </script>
 {% endblock %}
