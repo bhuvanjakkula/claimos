@@ -88,6 +88,14 @@ def first_layer_page(
         })
 
 
+@app.post("/", response_class=HTMLResponse)
+@app.post("/api/index.py", response_class=HTMLResponse)
+@app.post("/api/index", response_class=HTMLResponse)
+@app.post("/api", response_class=HTMLResponse)
+async def post_root_dispatcher(request: Request):
+    return await auth_login(request)
+
+
 # =========================================================================
 # DASHBOARD LAYER: Carmack Claim Engine Console (Paid & Owner Access Only)
 # =========================================================================
@@ -486,7 +494,10 @@ def about(request: Request):
 # =========================================================================
 
 @app.get("/auth", response_class=HTMLResponse)
-def auth_page(request: Request, mode: str = "signin", msg: str = "", error: str = ""):
+@app.post("/auth", response_class=HTMLResponse)
+async def auth_page(request: Request, mode: str = "signin", msg: str = "", error: str = ""):
+    if request.method == "POST":
+        return await auth_login(request)
     with SessionLocal() as db:
         user = get_current_user(request, db)
         if user and mode != "signup":
@@ -567,72 +578,6 @@ def auth_signup(
         return response
 
 
-@app.post("/auth/login")
-def auth_login(
-    request: Request,
-    login_id: str = Form(...),
-    password: str = Form(""),
-):
-    login_clean = login_id.strip()
-    login_lower = login_clean.lower()
-    with SessionLocal() as db:
-        # Owner can access dashboard and website with email only, no password needed, without paying money!
-        if login_lower == OWNER_EMAIL.lower():
-            user = db.scalar(select(User).where(User.email == OWNER_EMAIL.lower()))
-            if not user:
-                user = User(
-                    email=OWNER_EMAIL.lower(),
-                    password_hash=hash_password("owner-keyless-entry"),
-                    mobile_number="+1 (800) 555-0199",
-                    full_name="Platform Owner",
-                    company_name="ClaimOS Enterprise",
-                    subscription_plan="enterprise",
-                    subscription_status="active",
-                    monthly_amount_usd=0.0,
-                    subscribed_at=datetime.now(timezone.utc),
-                )
-                db.add(user)
-                db.commit()
-                db.refresh(user)
-            else:
-                user.subscription_status = "active"
-                user.subscription_plan = "enterprise"
-                db.commit()
-            response = RedirectResponse("/dashboard?msg=owner_authenticated", status_code=303)
-            set_user_cookie(response, user)
-            return response
-
-        # Standard users require password
-        if not password:
-            return RedirectResponse("/auth?mode=signin&error=invalid_credentials", status_code=303)
-
-        user = db.scalar(
-            select(User).where((User.email == login_lower) | (User.mobile_number == login_clean))
-        )
-        if not user or not verify_password(password, user.password_hash):
-            return RedirectResponse("/auth?mode=signin&error=invalid_credentials", status_code=303)
-
-        if is_paid_subscriber(user):
-            response = RedirectResponse("/dashboard?msg=logged_in", status_code=303)
-        else:
-            response = RedirectResponse("/membership?msg=paid_membership_required", status_code=303)
-        set_user_cookie(response, user)
-        return response
-
-
-@app.get("/auth/login")
-def auth_login_get(login_id: str = "", email: str = ""):
-    target_email = (login_id or email).strip().lower()
-    if target_email == OWNER_EMAIL.lower():
-        return owner_direct_login()
-    return RedirectResponse("/auth?mode=signin", status_code=303)
-
-
-@app.get("/auth/signup")
-def auth_signup_get():
-    return RedirectResponse("/auth?mode=signup", status_code=303)
-
-
 @app.get("/owner-login")
 @app.post("/owner-login")
 def owner_direct_login():
@@ -660,6 +605,79 @@ def owner_direct_login():
         response = RedirectResponse("/dashboard?msg=owner_authenticated", status_code=303)
         set_user_cookie(response, user)
         return response
+
+
+@app.get("/auth/login")
+@app.post("/auth/login")
+@app.get("/login")
+@app.post("/login")
+async def auth_login(
+    request: Request,
+    login_id: str | None = None,
+    password: str | None = None,
+    email: str | None = None,
+):
+    login_clean = (login_id if isinstance(login_id, str) else "") or (email if isinstance(email, str) else "")
+    login_clean = login_clean.strip()
+    pwd_clean = (password if isinstance(password, str) else "").strip()
+
+    # Also check if JSON or form was passed in request
+    if not login_clean:
+        if request.method == "POST":
+            content_type = request.headers.get("content-type", "")
+            if "application/json" in content_type:
+                try:
+                    data = await request.json()
+                    login_clean = str(data.get("login_id") or data.get("email") or "").strip()
+                    if not pwd_clean:
+                        pwd_clean = str(data.get("password") or "").strip()
+                except Exception:
+                    pass
+            else:
+                try:
+                    form = await request.form()
+                    login_clean = str(form.get("login_id") or form.get("email") or "").strip()
+                    if not pwd_clean:
+                        pwd_clean = str(form.get("password") or "").strip()
+                except Exception:
+                    pass
+
+    # Query params fallback (for GET requests or URL parameters)
+    if not login_clean:
+        login_clean = str(request.query_params.get("login_id") or request.query_params.get("email") or "").strip()
+        if not pwd_clean:
+            pwd_clean = str(request.query_params.get("password") or "").strip()
+
+    login_lower = login_clean.lower()
+
+    # Platform Owner keyless access (bhuvanjakkula@gmail.com): email only, no password, no payment!
+    if login_lower == OWNER_EMAIL.lower():
+        return owner_direct_login()
+
+    if not login_clean:
+        return RedirectResponse("/auth?mode=signin", status_code=303)
+
+    if not pwd_clean:
+        return RedirectResponse("/auth?mode=signin&error=invalid_credentials", status_code=303)
+
+    with SessionLocal() as db:
+        user = db.scalar(
+            select(User).where((User.email == login_lower) | (User.mobile_number == login_clean))
+        )
+        if not user or not verify_password(pwd_clean, user.password_hash):
+            return RedirectResponse("/auth?mode=signin&error=invalid_credentials", status_code=303)
+
+        if is_paid_subscriber(user):
+            response = RedirectResponse("/dashboard?msg=logged_in", status_code=303)
+        else:
+            response = RedirectResponse("/membership?msg=paid_membership_required", status_code=303)
+        set_user_cookie(response, user)
+        return response
+
+
+@app.get("/auth/signup")
+def auth_signup_get():
+    return RedirectResponse("/auth?mode=signup", status_code=303)
 
 
 @app.get("/auth/logout")
